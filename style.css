@@ -1,0 +1,39 @@
+.container {
+	width: 450px;
+    height: 600px;
+	margin-left: auto;
+    margin-right: auto;
+    background-color: #C4C4C4;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+input{
+    width: 440px;
+}
+ul 	{
+	padding-left: 0;
+
+}
+li {
+	list-style-type: none;
+	font-size: 20px;
+	cursor: pointer;
+}
+.repoList {
+	position: relative;
+	padding: 25px;
+	background-color: #e7bbbb;
+	display: flex;
+	border: 1px solid black;
+	margin-bottom: 5px;
+}
+.repoList li {
+	width: 330px;
+	display: flex;
+	justify-content: center;
+}
+.repoList span {
+	position: absolute;
+	right: 20px;
+	width: 30px;
+}
