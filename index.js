@@ -1,32 +1,34 @@
-const container = document.querySelector("#container");
-const input = document.querySelector('input')
-const autocompleteList = document.querySelector("#autocomplete-list");
-const repositoryList = document.querySelector("#repository-list");
+const container = document.querySelector(".container");
+const input = document.querySelector('input');
+const autocompleteList = document.querySelector(".autocomplete-list");
+const repositoryList = document.querySelector(".repository-list");
+const ul = document.querySelector('ul');
 let autocompleteRepos = [];
 let repositoryRepos = [];
 
 repositoryList.addEventListener('click', (e) => {
-  if (e.target.closest("span")) {
-    const el = document.getElementById(
-      `${e.target.closest("span").parentElement.id}`
-    );
-
-    el.remove();
+  let target = e.target;
+  if (!target.classList.contains("img")) {
+    return;
   }
-})
+
+  target.parentElement.parentElement.remove();
+});
 
 function repoListTemplate(repo) {
   repositoryRepos.push(repo.id);
   const list = document.createElement("li");
 
-  list.innerHTML = `
-    <ul class='repoList' id='${repo.id}'>
-      <li>Name: ${repo.name}</li>
-      <li>Owner: ${repo.owner.login}</li>
-      <li>Stars: ${repo.stargazers_count}</li>
-      <span><img src="circle-xmark-solid.svg" alt="img"></span>
-    </ul>
-  `;
+  list.insertAdjacentHTML('beforeend', `
+        <div class="repoList">
+          Name: ${repo.name}
+          <br>Owner: ${repo.owner.login}
+          <br>Stars: ${repo.stargazers_count}
+          <button>
+          <img src="circle-xmark-solid.svg" alt="img" class="img">
+          </button>
+          </div>`
+  );
 
   repositoryList.append(list);
   input.value = "";
@@ -39,8 +41,13 @@ autocompleteList.addEventListener('click', (e) => {
     if (!repositoryRepos.includes(repo.id)) {
       repoListTemplate(repo);
     }
+    clearRender();
   }
-})
+});
+
+function clearRender() {
+ autocompleteList.textContent = ''; 
+}
 
 function listTemplate({name}) {
   const list = `
@@ -51,21 +58,17 @@ function listTemplate({name}) {
 
 function renderList(res) {
   let fragment = '';
-  if (!res) {
-    autocompleteList.innerHTML = "";
-    return
-  }
 
   for (let i = 0; i < 5; i++) {
     if (res[i]) {
       autocompleteRepos.push(res[i]);
-      const card = listTemplate(res[i]);
-      fragment += card;
+      fragment += listTemplate(res[i]);
     }
   }
 
-  autocompleteList.innerHTML = fragment;
+  autocompleteList.insertAdjacentHTML('afterbegin', fragment);
 }
+
 const debounce = (fn, debounceTime) => {
   let timeoutId;
 
@@ -85,13 +88,14 @@ function fn(value) {
 
 input.addEventListener("input", (e) => {
   const value = e.target.value;
-  repos = []
+  repos = [];
   debouncedFn(value);
 });
 
+
 const debouncedFn = debounce(fn, 500);
 async function getUsers(name) {
-  let repos = fetch(`https://api.github.com/users/${name}/repos`).then(
+  let repos = fetch(`https://api.github.com/users/${name}/repos?per_page=5`).then(
     (successResponse) => {
 
       if (successResponse.status != 200) {

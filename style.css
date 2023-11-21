@@ -37,3 +37,16 @@ li {
 	right: 20px;
 	width: 30px;
 }
+
+.img {
+	position: absolute;
+	right: 25px;
+	top: 40px;
+	width: 40px;
+	height: 40px;
+}
+
+button {
+	border: none;
+	background-color: #e7bbbb;
+}
