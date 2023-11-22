@@ -1,3 +1,7 @@
+// Во всех примерах, которые я нашел, createElement используется
+// совместно с innerHTML или insertAdjacentHTML. Не нашел как это можно сделать
+// по-другому
+
 const container = document.querySelector(".container");
 const input = document.querySelector('input');
 const autocompleteList = document.querySelector(".autocomplete-list");
@@ -18,7 +22,7 @@ repositoryList.addEventListener('click', (e) => {
 function repoListTemplate(repo) {
   repositoryRepos.push(repo.id);
   const list = document.createElement("li");
-
+  
   list.insertAdjacentHTML('beforeend', `
         <div class="repoList">
           Name: ${repo.name}
@@ -65,8 +69,9 @@ function renderList(res) {
       fragment += listTemplate(res[i]);
     }
   }
-
-  autocompleteList.insertAdjacentHTML('afterbegin', fragment);
+  let div = document.createElement('DIV');
+  div.insertAdjacentHTML('beforeend', fragment);
+  autocompleteList.append(div);
 }
 
 const debounce = (fn, debounceTime) => {
