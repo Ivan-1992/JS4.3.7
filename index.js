@@ -1,7 +1,3 @@
-// Во всех примерах, которые я нашел, createElement используется
-// совместно с innerHTML или insertAdjacentHTML. Не нашел как это можно сделать
-// по-другому
-
 const container = document.querySelector(".container");
 const input = document.querySelector('input');
 const autocompleteList = document.querySelector(".autocomplete-list");
@@ -55,23 +51,26 @@ function clearRender() {
 
 function listTemplate({name}) {
   const list = `
-    <li>${name}</li>
+    ${name}
   `;
   return list;
 }
 
 function renderList(res) {
-  let fragment = '';
+  let fragment;
+
+  if (ul.hasChildNodes()) {
+    autocompleteList.textContent = '';
+  }
 
   for (let i = 0; i < 5; i++) {
     if (res[i]) {
+      fragment = document.createElement('li');
+      fragment.textContent = listTemplate(res[i]);
       autocompleteRepos.push(res[i]);
-      fragment += listTemplate(res[i]);
+      autocompleteList.append(fragment);
     }
   }
-  let div = document.createElement('DIV');
-  div.insertAdjacentHTML('beforeend', fragment);
-  autocompleteList.append(div);
 }
 
 const debounce = (fn, debounceTime) => {
