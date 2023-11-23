@@ -60,7 +60,7 @@ function renderList(res) {
   let fragment;
 
   if (ul.hasChildNodes()) {
-    autocompleteList.textContent = '';
+    clearRender();
   }
 
   for (let i = 0; i < 5; i++) {
